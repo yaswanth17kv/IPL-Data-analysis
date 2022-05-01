@@ -1,0 +1,125 @@
+---
+title: "IPL Dataset analysis with R"
+author: "K.V.Yaswanth"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+###IPL DTA SET ANALYIS WITH R PROGRAMMING USING DPLYR PACKAGE###
+#### Objective- To analyze the IPL matches and deliveries datasets and obtain inferences.
+
+
+#Loading required packages
+
+```{r}
+library(dplyr)
+```
+
+#Read data sets
+
+```{r}
+matches_data<-read.csv("C:/Users/Yaswanth Karri/Desktop/matches.csv")
+deliveries_data <- read.csv("C:/Users/Yaswanth Karri/Desktop/deliveries.csv/deliveries.csv")
+```
+
+#Integrating both datasets
+
+```{r}
+data <- bind_rows(matches_data,deliveries_data)
+```
+
+#Data Cleaning
+
+```{r}
+data<- select(data, -c(umpire1,umpire2))
+```
+
+#Knowing the data
+
+```{r}
+head(matches_data)
+head(deliveries_data)
+str(matches_data)
+str(deliveries_data)
+```
+
+#Total number of matches in the dataset
+
+```{r}
+length(data$id) 
+```
+
+#Total number of seasons 
+
+```{r}
+length(unique(data$season))
+```
+
+#Total number of matches played in each season
+
+```{r}
+data %>% 
+  group_by(season) %>%
+  dplyr::summarize(number_of_matches = n())%>% arrange(desc(number_of_matches))
+```
+
+#Number of matches played at a particular venue in descending order
+
+```{r}
+data%>% 
+  group_by(venue) %>%
+  dplyr::summarize(nmatches = n())%>%arrange(desc(nmatches))
+```
+
+#IPL teams and their number of wins in descending order
+
+```{r}
+data %>% 
+  group_by(winner) %>%
+  dplyr::summarize(wins = n())%>% arrange(desc(wins))
+
+```
+#Teams dominating in certain locations
+
+```{r}
+data%>% 
+  filter(result != 'no result') %>% group_by(winner,city) %>% 
+  dplyr::summarise(win = n()) %>% arrange(desc(win))
+```
+
+#Teams which were not able to perform well in non-home location
+
+```{r}
+data%>% 
+  filter(result != 'no result') %>% group_by(winner,city) %>% 
+  dplyr::summarise(win = n()) %>% arrange((win))
+```
+
+#Best IPL batsmen
+
+```{r}
+data%>% 
+  group_by(batsman) %>% 
+  dplyr::summarise(runs =length(batsman_runs)) %>% arrange(desc(runs))
+```
+
+#Best IPL bowlers
+
+```{r}
+data %>% group_by(bowler) %>% filter(player_dismissed!="") %>% 
+  dplyr::summarise(wickets= n())%>% arrange(desc(wickets)) 
+
+```
+
+#Most Man of the match awards
+
+```{r}
+matches_data %>% 
+  group_by(player_of_match) %>%
+  dplyr::summarize(awards = n())%>% arrange(desc(awards))
+
+```
+
+
