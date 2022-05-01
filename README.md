@@ -18,8 +18,7 @@ Kolkata Knight Riders	,
 Royal Challengers Bangalore  ,                   			
 Kings XI Punjab	,                                			
                                   			
-#Teams dominating in certain locations
-winner                         city             
+#Teams dominating in certain locations            
 Mumbai Indians	         -      Mumbai	,          		
 Kolkata Knight Riders	    -     Kolkata	 ,      		
 Chennai Super Kings	       -    Chennai	 ,       		
